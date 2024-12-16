@@ -1,0 +1,7 @@
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.csproj.AssemblyReference.cache
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.AssemblyInfoInputs.cache
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.AssemblyInfo.cs
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.csproj.CoreCompileInputs.cache
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\aalsa\development\plane_ticket_system\apps\obj\Debug\net9.0\apps.MvcApplicationPartsAssemblyInfo.cache
