@@ -1,7 +1,12 @@
 
 using Microsoft.AspNetCore.Builder; // This namespace provides classes for building and configuring ASP.NET Core applications and middleware components.
 using Microsoft.Extensions.DependencyInjection; // This namespace provides classes for adding services to the ASP.NET Core application's service container.
-using Microsoft.EntityFrameworkCore; // This namespace provides classes for working with Entity Framework Core, a set of .NET libraries for working with data access.
+using Microsoft.EntityFrameworkCore; // provides classes for working with Entity Framework Core, a set of .NET libraries for working with data access.
+using Swashbuckle.AspNetCore.Swagger; // This namespace provides classes for working with Swagger
+using Microsoft.OpenApi.Models; // This namespace provides classes for working with Open API 3.0.
+
+using PlaneTicketSystem.Data;
+
 
 public class Program
 {

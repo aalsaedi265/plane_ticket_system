@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "jS+tqpICuWaKaG6Bqwgwv6/4v0g0RifIGKkoArf6zBg=",
+  "Source": "apps",
+  "BasePath": "_content/apps",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -16,3 +16,7 @@ dotnet run => start project & show console output
 dotnet watch run => restart project at every  code change
 dotnet build => build project checks compilation errors
 dotnet run --launch-profile "ProfileName" => run project with launch profile
+
+
+## next step
+proceed with implementing the data models and database context that correspond to these modules? This will establish the foundation for the SQL Server integration that will later be containerized with Docker.
