@@ -2,6 +2,14 @@
 ### used dotnet new webapi
 for creating project
 
+
+## current plan now
+Set up and configure the SQL Server database locally
+Verify the backend's connection to the database and implement any necessary migrations
+Develop the Django frontend
+Create individual Dockerfiles for each component
+Finally, create the Docker Compose configuration to orchestrate all services
+
 ### Normally: command pallet .NET: new project
 
 ### need package

@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.Swagger; // This namespace provides classes for wor
 using Microsoft.OpenApi.Models; // This namespace provides classes for working with Open API 3.0.
 
 using PlaneTicketSystem.Data;
-
+using PlaneTicketSystem.Data.Migrations;
 
 public class Program
 {
@@ -23,7 +23,16 @@ public class Program
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        builder.Services.AddScoped<MigrationManager>();
+
         var app = builder.Build(); // Builds the application.
+
+        // Initialize Database
+        using (var scope = app.Services.CreateScope())
+        {
+            var migrationManager = scope.ServiceProvider.GetRequiredService<MigrationManager>();
+            migrationManager.InitializeDatabaseAsync().Wait();
+        }
 
         app.UseSwagger(); // Adds the Swagger middleware to the application.
         app.UseSwaggerUI(); // Adds the Swagger UI middleware to the application.
