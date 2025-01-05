@@ -42,3 +42,5 @@ python manage.py runserver => start project & show console output great for chec
 
 python manage.py migrate => apply database changes run this before runserver
 
+#### http://localhost:5257/swagger/index.html
+this lets you see the backend endpoints using swagger
