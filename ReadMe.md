@@ -44,3 +44,4 @@ python manage.py migrate => apply database changes run this before runserver
 
 #### http://localhost:5257/swagger/index.html
 this lets you see the backend endpoints using swagger
+Allos to trigger the endpoints like post delete put

@@ -12,12 +12,12 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args); // Creates a new instance of the WebApplication class using the provided arguments.
+        var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddControllers(); // Adds the Controllers service to the service collection.
-        builder.Services.AddEndpointsApiExplorer(); // Adds the Endpoints API Explorer service to the service collection.
-        builder.Services.AddSwaggerGen(); // Adds the SwaggerGen service to the service collection.
+        builder.Services.AddControllers(); // This registers the MVC controllers
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
         // Add SQL server context
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -25,7 +25,18 @@ public class Program
 
         builder.Services.AddScoped<MigrationManager>();
 
-        var app = builder.Build(); // Builds the application.
+        // Add CORS services to allow requests from your Django frontend
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+
+        var app = builder.Build();
 
         // Initialize Database
         using (var scope = app.Services.CreateScope())
@@ -34,14 +45,21 @@ public class Program
             migrationManager.InitializeDatabaseAsync().Wait();
         }
 
-        app.UseSwagger(); // Adds the Swagger middleware to the application.
-        app.UseSwaggerUI(); // Adds the Swagger UI middleware to the application.
-        app.UseHttpsRedirection(); // Adds the HTTPS redirection middleware to the application.
-        app.UseAuthorization(); // Adds the authorization middleware to the application.
-        app.MapControllers(); // Maps the controllers to the application.
+        // Configure the HTTP request pipeline
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-        app.Run(); // Starts the application.
+        // Add routing and CORS middleware
+        app.UseRouting(); // Add this line to enable routing
+        app.UseCors(); // Add this to enable CORS
 
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+
+        // Configure endpoints after UseRouting
+        app.MapControllers();
+
+        app.Run();
     }
 }
 

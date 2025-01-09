@@ -1,7 +1,9 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.conf import settings
+from django.contrib import messages
+import requests
 import requests
 
 class BookingListView(View):
@@ -24,10 +26,44 @@ class BookingListView(View):
                 
         except requests.RequestException as e:
             error_message = "Unable to connect to flight service"
-            print(f"Error fetching flights: {str(e)}")
         
         # Pass both flights and error_message to the template
         return render(request, 'list.html', {
             'flights': flights,
             'error_message': error_message
         })
+
+    def post(self, request):
+        try:
+            # Prepare the booking data
+            booking_data = {
+                'flightNumber': request.POST.get('flightNumber'),
+                'passengerName': request.POST.get('passengerName'),
+                'status': 'Confirmed'  # Initial status
+            }
+            
+            print(f"Sending booking request: {booking_data}")
+            
+            headers = {
+            'Content-Type': 'application/json'
+            }
+
+            # Send booking request to the C# backend
+            response = requests.post(
+                f"{settings.API_BASE_URL}/booking",
+                json=booking_data,
+                headers=headers
+            )
+            
+            print(f"Response status: {response.status_code}")
+            print(f"Response content: {response.text}")
+
+            if response.status_code == 200 or response.status_code == 201:
+                messages.success(request, 'Flight booked successfully!')
+            else:
+                messages.error(request, 'Failed to book flight. Please try again.')
+
+        except requests.RequestException as e:
+            messages.error(request, f'Error processing booking: {str(e)}')
+
+        return redirect('/')  # Redirect back to the flight list

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlaneTicketSystem.Data;
 using System.Threading.Tasks;
+using System;
+
 
 namespace PlaneTicketSystem.Booking
 {
@@ -31,4 +33,55 @@ public class BookingController : ControllerBase
     { 
         return Ok(await _context.Bookings.ToListAsync());
     }
- }}
+
+    [HttpPost]
+    public async Task<IActionResult> CreateBooking([FromBody] BookingRequest request)
+    {
+            if (request == null)
+                return BadRequest("Booking data is required");
+
+            try
+            {
+                // Check if flight exists and has available seats
+                var flight = await _context.Schedules
+                    .FirstOrDefaultAsync(s => s.FlightNumber == request.FlightNumber);
+
+                if (flight == null)
+                    return NotFound("Flight not found");
+
+                if (flight.AvailableSeats <= 0)
+                    return BadRequest("No seats available for this flight");
+
+                // Create new booking
+                var booking = new PlaneTicketSystem.Data.Models.Booking
+                {
+                    PassengerName = request.PassengerName,
+                    FlightNumber = request.FlightNumber,
+                    BookingDate = DateTime.UtcNow,
+                    Status = "Confirmed",
+                    Price = flight.BasePrice
+                };
+
+                // Update available seats
+                flight.AvailableSeats--;
+
+                // Save booking and update flight
+                _context.Bookings.Add(booking);
+                var saveResult = await _context.SaveChangesAsync();
+                Console.WriteLine($"SaveChanges result: {saveResult}");
+                
+                return Ok(booking);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    }
+    //define the request structure
+    public class BookingRequest
+    {
+        public required string PassengerName { get; set; }
+        public required string FlightNumber { get; set; }
+    }
+}
