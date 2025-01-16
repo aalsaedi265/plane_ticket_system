@@ -35,35 +35,23 @@ class BookingListView(View):
 
     def post(self, request):
         try:
-            # Prepare the booking data
             booking_data = {
                 'flightNumber': request.POST.get('flightNumber'),
                 'passengerName': request.POST.get('passengerName'),
-                'status': 'Confirmed'  # Initial status
-            }
-            
-            print(f"Sending booking request: {booking_data}")
-            
-            headers = {
-            'Content-Type': 'application/json'
+                'status': 'Confirmed'
             }
 
-            # Send booking request to the C# backend
             response = requests.post(
                 f"{settings.API_BASE_URL}/booking",
-                json=booking_data,
-                headers=headers
+                json=booking_data
             )
-            
-            print(f"Response status: {response.status_code}")
-            print(f"Response content: {response.text}")
 
-            if response.status_code == 200 or response.status_code == 201:
+            if response.status_code in [200, 201]:
                 messages.success(request, 'Flight booked successfully!')
             else:
                 messages.error(request, 'Failed to book flight. Please try again.')
 
         except requests.RequestException as e:
-            messages.error(request, f'Error processing booking: {str(e)}')
+            messages.error(request, f'Connection error: {str(e)}')
 
-        return redirect('/')  # Redirect back to the flight list
+        return redirect('booking:home')

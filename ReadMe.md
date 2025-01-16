@@ -42,6 +42,8 @@ python manage.py runserver => start project & show console output great for chec
 
 python manage.py migrate => apply database changes run this before runserver
 
+python manage.py collectstatic => collect static files
+
 #### http://localhost:5257/swagger/index.html
 this lets you see the backend endpoints using swagger
 Allos to trigger the endpoints like post delete put

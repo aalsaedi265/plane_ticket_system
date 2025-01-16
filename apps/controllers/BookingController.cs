@@ -36,7 +36,7 @@ public class BookingController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateBooking([FromBody] BookingRequest request)
-    {
+        {
             if (request == null)
                 return BadRequest("Booking data is required");
 
@@ -67,13 +67,35 @@ public class BookingController : ControllerBase
 
                 // Save booking and update flight
                 _context.Bookings.Add(booking);
-                var saveResult = await _context.SaveChangesAsync();
-                Console.WriteLine($"SaveChanges result: {saveResult}");
-                
-                return Ok(booking);
+                await _context.SaveChangesAsync();
+
+                // Create comprehensive response with booking and flight details
+                var bookingResponse = new
+                {
+                    Booking = new
+                    {
+                        Id = booking.Id,
+                        PassengerName = booking.PassengerName,
+                        FlightNumber = booking.FlightNumber,
+                        BookingDate = booking.BookingDate,
+                        Status = booking.Status,
+                        Price = booking.Price
+                    },
+                    FlightDetails = new
+                    {
+                        Origin = flight.Origin,
+                        Destination = flight.Destination,
+                        DepartureTime = flight.DepartureTime,
+                        ArrivalTime = flight.ArrivalTime,
+                        RemainingSeats = flight.AvailableSeats
+                    }
+                };
+
+                return Ok(bookingResponse);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error creating booking: {ex}");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

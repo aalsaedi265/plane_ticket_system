@@ -1,0 +1,42 @@
+
+
+<div class="overflow-x-auto">
+    <table class="min-w-full table-auto">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left">Flight Number</th>
+                <th class="px-6 py-3 text-left">Origin</th>
+                <th class="px-6 py-3 text-left">Destination</th>
+                <th class="px-6 py-3 text-left">Departure Time</th>
+                <th class="px-6 py-3 text-left">Available Seats</th>
+                <th class="px-6 py-3 text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% if flights %}
+                {% for flight in flights %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4">{{ flight.flightNumber }}</td>
+                        <td class="px-6 py-4">{{ flight.origin }}</td>
+                        <td class="px-6 py-4">{{ flight.destination }}</td>
+                        <td class="px-6 py-4">{{ flight.departureTime }}</td>
+                        <td class="px-6 py-4">{{ flight.availableSeats }}</td>
+                        <td class="px-6 py-4">
+                            <button 
+                                onclick="window.bookingModal.open('{{ flight.flightNumber }}')"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Book Now
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="px-6 py-4 text-center" colspan="6">
+                        No flights available at this time
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
