@@ -26,6 +26,17 @@ dotnet build => build project checks compilation errors
 dotnet run --launch-profile "ProfileName" => run project with launch profile
 
 
+#### dotnet
+Entity Framework Core tools. These tools are necessary for managing migrations and database updates in your .NET project
+
+dotnet tool install --global dotnet-ef
+
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+
+
 ## next step
 proceed with implementing the data models and database context that correspond to these modules? This will establish the foundation for the SQL Server integration that will later be containerized with Docker.
 
@@ -47,3 +58,7 @@ python manage.py collectstatic => collect static files
 #### http://localhost:5257/swagger/index.html
 this lets you see the backend endpoints using swagger
 Allos to trigger the endpoints like post delete put
+
+### jwt
+https://generate-secret.vercel.app/16
+https://generate-secret.vercel.app/32 => generate secret key for jwt token 32 characters

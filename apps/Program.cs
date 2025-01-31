@@ -7,6 +7,9 @@ using Microsoft.OpenApi.Models; // This namespace provides classes for working w
 
 using PlaneTicketSystem.Data;
 using PlaneTicketSystem.Data.Migrations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 public class Program
 {
@@ -18,6 +21,23 @@ public class Program
         builder.Services.AddControllers(); // This registers the MVC controllers
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
+                };
+            });
+        builder.Services.AddAuthorization();
+
 
         // Add SQL server context
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -44,6 +64,13 @@ public class Program
             var migrationManager = scope.ServiceProvider.GetRequiredService<MigrationManager>();
             migrationManager.InitializeDatabaseAsync().Wait();
         }
+
+        DotNetEnv.Env.Load();
+
+        var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+        var jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
         // Configure the HTTP request pipeline
         app.UseSwagger();
