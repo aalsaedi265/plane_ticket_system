@@ -3,4 +3,5 @@
 /django
 
 /core/settings.py
-apps/env
+
+apps/.env
